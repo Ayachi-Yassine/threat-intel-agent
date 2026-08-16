@@ -1,0 +1,24 @@
+<!--
+  Add this block inside <ossec_config> in:
+  D:\medflow\wazuh\wazuh-docker\single-node\config\wazuh_cluster\wazuh_manager.conf
+
+  Then restart the manager:
+    docker restart single-node-wazuh.manager-1
+
+  Notes:
+  - host.docker.internal lets the manager container (Docker Desktop on
+    Windows) reach the webhook server running on your host machine.
+  - level 7 means only alerts of severity 7+ trigger the webhook. Lower it
+    for more alerts (more Groq calls too). SSH brute force is level 10,
+    so the bundled test alert clears this threshold.
+  - If "custom-webhook" isn't recognized by your Wazuh version, switch
+    name to "slack" instead -- Wazuh's built-in Slack formatter still
+    POSTs valid JSON to any URL; the webhook doesn't care that it's
+    shaped for Slack, since alert_format=json sends the full alert body.
+-->
+<integration>
+  <name>custom-webhook</name>
+  <hook_url>http://host.docker.internal:8000/wazuh-alerts</hook_url>
+  <level>7</level>
+  <alert_format>json</alert_format>
+</integration>
