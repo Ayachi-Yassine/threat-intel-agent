@@ -129,17 +129,6 @@ The local test exercises the CrewAI pipeline without requiring a live Wazuh aler
 
 The example integration block is in `config/wazuh_manager_integration.xml`. Review and adapt it to the actual Wazuh deployment and webhook address before adding it to the manager configuration. Restart/reload Wazuh only after validating the configuration.
 
-## Security boundaries and current limitations
-
-This project is a prototype and should be run only in a controlled lab until the following areas are hardened:
-
-- **Webhook authentication:** the current `/wazuh-alerts` route does not show request authentication. Restrict network access to trusted Wazuh infrastructure or add an authenticated integration before exposing it beyond an isolated lab.
-- **LLM output is not authoritative:** model-generated IOC assessments and risk scores can be wrong. Validate consequential decisions with deterministic checks and analyst review.
-- **No external IOC enrichment yet:** the IOC agent reasons from the alert and its prompt; it does not currently query VirusTotal, OTX, MISP, or another threat-intelligence provider.
-- **Responder trust boundary:** the handoff uses an API key and HTTP request. Use a protected network path and consider TLS, key rotation, request authentication, and replay protection.
-- **Neo4j lifecycle and resilience:** the graph driver is lazily initialized. Add application lifecycle cleanup, retries, and explicit database health checks before production use.
-- **Observability:** current logging is basic application logging. Durable incident journaling, structured event records, distributed tracing, and end-to-end correlation IDs remain improvement areas.
-- **Testing:** `tests/test_local.py` is a manual local exercise, not evidence of comprehensive automated unit, integration, or security test coverage.
 
 ## Roadmap
 
